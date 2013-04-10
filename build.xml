@@ -34,6 +34,8 @@
     <property name="bpelg.server.xml" value="src/main/resources/bpelg/server.xml"/>
     <property name="bpelg.log4j.properties" value="src/main/resources/bpelg/log4j.properties"/>
 
+    <property name="bpelg-in-memory.dir" value="server/bpelg-in-memory"/>
+
     <property name="active-bpel.dir" value="server\active-bpel" />
     <property name="active-bpel.file.name" value="activebpel-5.0.2-bin.zip"/>
     <property name="active-bpel.download.url" value="${download.base.url}${active-bpel.file.name}" />
@@ -177,6 +179,26 @@
         <!-- add missing h2 database to tomcat installation -->
         <copy file="${download.dir}/${bpelg.database.name}"
               tofile="${bpelg.dir}/${tomcat.name}/lib/${bpelg.database.name}"/>
+    </target>
+
+    <target name="bpelg-in-memory" description="Install Bpel-g">
+        <install-tomcat dest="${bpelg-in-memory.dir}"
+                        additional-vm-param="-Djavax.xml.soap.MessageFactory=org.apache.axis.soap.MessageFactoryImpl"/>
+
+        <get dest="${download.dir}" skipexisting="true">
+            <url url="${bpelg.download.url}"/>
+        </get>
+        <unzip src="${download.dir}/${bpelg.file.name}" dest="${bpelg-in-memory.dir}/${tomcat.name}/webapps/bpel-g"/>
+        <copy file="${bpelg.log4j.properties}" todir="${bpelg-in-memory.dir}/${tomcat.name}/webapps/bpel-g/WEB-INF"
+              overwrite="true"/>
+
+        <get dest="${download.dir}" skipexisting="true">
+            <url url="${bpelg.database.url}"/>
+        </get>
+
+        <!-- add missing h2 database to tomcat installation -->
+        <copy file="${download.dir}/${bpelg.database.name}"
+              tofile="${bpelg-in-memory.dir}/${tomcat.name}/lib/${bpelg.database.name}"/>
     </target>
 
     <target name="orchestra" description="Install Orchestra">
