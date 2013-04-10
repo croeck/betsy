@@ -24,6 +24,8 @@
     <property name="ode.server.xml" value="src/main/resources/ode/server.xml"/>
     <property name="ode.log4j.properties" value="src/main/resources/ode/log4j.properties"/>
 
+    <property name="ode-in-memory.dir" value="server/ode-in-memory"/>
+
     <property name="bpelg.file.name" value="bpel-g-5.3.war"/>
     <property name="bpelg.download.url" value="${download.base.url}${bpelg.file.name}"/>
     <property name="bpelg.dir" value="server/bpelg"/>
@@ -141,6 +143,19 @@
         <unzip src="${download.dir}/${ode.file.name}" dest="${ode.dir}"/>
         <unzip src="${ode.dir}/${ode.name}/ode.war" dest="${ode.dir}/${tomcat.name}/webapps/ode"/>
         <copy file="${ode.log4j.properties}" todir="${ode.dir}/${tomcat.name}/webapps/ode/WEB-INF/classes"
+              overwrite="true"/>
+    </target>
+
+    <target name="ode-in-memory" description="Install Apache ODE">
+        <install-tomcat dest="${ode-in-memory.dir}"/>
+
+        <get dest="${download.dir}" skipexisting="true">
+            <url url="${ode.download.url}"/>
+        </get>
+
+        <unzip src="${download.dir}/${ode.file.name}" dest="${ode-in-memory.dir}"/>
+        <unzip src="${ode-in-memory.dir}/${ode.name}/ode.war" dest="${ode-in-memory.dir}/${tomcat.name}/webapps/ode"/>
+        <copy file="${ode.log4j.properties}" todir="${ode-in-memory.dir}/${tomcat.name}/webapps/ode/WEB-INF/classes"
               overwrite="true"/>
     </target>
 
